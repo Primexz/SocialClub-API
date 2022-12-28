@@ -1,0 +1,20 @@
+{
+    "name": "rockstarscapi",
+    "version": "1.0.0",
+    "description": "Unofficial wrapper for the rockstar social club api",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "npx tsc"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.18.2",
+        "puppeteer": "^19.4.1"
+    },
+    "devDependencies": {
+        "prettier": "2.8.1",
+        "typescript": "^4.9.4"
+    }
+}
