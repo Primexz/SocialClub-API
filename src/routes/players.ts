@@ -34,7 +34,9 @@ router.get("/:name", async (req, res) => {
         {}
     )
 
-    res.send(result)
+    if (result.status === false) return res.status(400).send(result)
+
+    res.send(JSON.parse(result))
 })
 
 router.get("/:id/feed", async (req, res) => {
