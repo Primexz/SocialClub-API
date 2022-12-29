@@ -43,11 +43,14 @@ router.get("/:id/feed", async (req, res) => {
         {}
     )
 
-    res.send(result.activities)
+    if (result.status === false) return res.status(400).send(result)
+
+    res.send(JSON.parse(result).activities)
 })
 
 router.get("/stats/:name", async (req, res) => {
     const playerName = req.params.name
+    const htmlParser = new HTMLParser()
 
     //make sure we have a request token in next requests..
     await apiRequest.req("https://socialclub.rockstargames.com/", {
@@ -55,20 +58,26 @@ router.get("/stats/:name", async (req, res) => {
         reqToken: true,
     })
 
-    const stats = await apiRequest.req(
-        `https://socialclub.rockstargames.com/games/gtav/StatsAjax?character=Freemode&category=Career&nickname=${playerName}&slot=Freemode`,
-        { json: false, reqToken: true }
-    )
-    const overview = await apiRequest.req(
-        `https://socialclub.rockstargames.com/games/gtav/career/overviewAjax?character=Freemode&nickname=${playerName}&slot=Freemode`,
-        { json: false, reqToken: true }
+    const stats = htmlParser.parsePlayerStats(
+        await apiRequest.req(
+            `https://socialclub.rockstargames.com/games/gtav/StatsAjax?character=Freemode&category=Career&nickname=${playerName}&slot=Freemode`,
+            { json: false, reqToken: true }
+        )
     )
 
-    const htmlParser = new HTMLParser()
+    if (stats.error) return res.status(400).send(stats)
+
+    const overview = htmlParser.parsePlayerOverview(
+        await apiRequest.req(
+            `https://socialclub.rockstargames.com/games/gtav/career/overviewAjax?character=Freemode&nickname=${playerName}&slot=Freemode`,
+            { json: false, reqToken: true }
+        )
+    )
+
     res.send({
-        ...htmlParser.parsePlayerStats(stats),
+        ...stats,
         overview: {
-            ...htmlParser.prasePlayerOverview(overview),
+            ...overview,
         },
     })
 })

@@ -11,6 +11,7 @@ export class ApiRequest extends ApiBrowser {
 
         // Perform the actuall request
         let res = await this.fetch(url, options, json)
+
         if (res.status === false && res.code === 401) {
             // Refresh the bearer, and re-try
             if (await this.refreshBearer()) {
@@ -28,7 +29,7 @@ export class ApiRequest extends ApiBrowser {
                 .split('__RequestVerificationToken" type="hidden" value="')[1]
                 .split('"')[0]
 
-        return res.body
+        return res.body || res
     }
 
     private getBearerToken(): Promise<string> {

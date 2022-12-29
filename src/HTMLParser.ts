@@ -4,12 +4,33 @@ import { stringToInt } from "./util"
 export class HTMLParser {
     private getValueFromStat(statdiv: Node, index: number): string | number {
         return stringToInt(
-            statdiv.childNodes[1].childNodes[1].childNodes[index].childNodes[3]
-                .childNodes[0].rawText
+            statdiv.childNodes[1].childNodes[1].childNodes[index]?.childNodes[3]
+                ?.childNodes[0].rawText || "0"
         )
     }
 
     parsePlayerStats(data: string) {
+        console.log(data)
+        if (data.includes("This member is not sharing game stats"))
+            return {
+                error: true,
+                message: "Private profile",
+            }
+
+        if (
+            data
+                .substr(
+                    data.indexOf("<td>Time spent in GTA Online</td>") + 33,
+                    250
+                )
+                .split("<td>")[1]
+                .split("</td>")[0] == "0"
+        )
+            return {
+                error: true,
+                message: "Invalid Player",
+            }
+
         const root = parse(data)
         const tablecontent =
             root.childNodes[3].childNodes[3].childNodes[3].childNodes[1]
@@ -420,7 +441,7 @@ export class HTMLParser {
         }
     }
 
-    prasePlayerOverview(data: string) {
+    parsePlayerOverview(data: string) {
         const crew = data.includes('<h3><a href="/crew/')
             ? data
                   .substr(data.indexOf('<h3><a href="/crew/') + 19, 50)
