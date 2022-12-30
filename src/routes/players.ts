@@ -6,7 +6,7 @@ export const router = Router()
 
 /**
  * @openapi
- * /players/{searchQuery}:
+ * /players/search/{searchQuery}:
  *   get:
  *     tags:
  *       - Player
