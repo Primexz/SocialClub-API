@@ -4,6 +4,25 @@ import { HTMLParser } from "../HTMLParser"
 
 export const router = Router()
 
+/**
+ * @openapi
+ * /players/{searchQuery}:
+ *   get:
+ *     tags:
+ *       - Player
+ *     summary: Get an list of users that match the search query
+ *     parameters:
+ *       - in: path
+ *         name: searchQuery
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Rockstar Player Name
+ *         example: gtaplayer
+ *     responses:
+ *       '200':
+ *         description: OK
+ */
 router.get("/search/:searchQuery", async (req, res) => {
     const result = JSON.parse(
         await apiRequest.req(
@@ -28,6 +47,27 @@ router.get("/search/:searchQuery", async (req, res) => {
     })
 })
 
+/**
+ * @openapi
+ * /players/{name}:
+ *   get:
+ *     tags:
+ *       - Player
+ *     summary: Get a social club player
+ *     parameters:
+ *       - in: path
+ *         name: name
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Rockstar Player Name
+ *         example: gtaplayer
+ *     responses:
+ *       '200':
+ *         description: OK
+ *       '400':
+ *         description: Bad Request. Player prob. invalid.
+ */
 router.get("/:name", async (req, res) => {
     const result = await apiRequest.req(
         `https://scapi.rockstargames.com/profile/getprofile?nickname=${req.params.name}&maxFriends=1`,
@@ -39,6 +79,27 @@ router.get("/:name", async (req, res) => {
     res.send(JSON.parse(result))
 })
 
+/**
+ * @openapi
+ * /players/{id}/feed:
+ *   get:
+ *     tags:
+ *       - Player
+ *     summary: Get the feed of a social club player
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: number
+ *         required: true
+ *         description: Rockstar ID
+ *         example: 12345
+ *     responses:
+ *       '200':
+ *         description: OK
+ *       '400':
+ *         description: Bad Request. Player prob. invalid.
+ */
 router.get("/:id/feed", async (req, res) => {
     const result = await apiRequest.req(
         `https://scapi.rockstargames.com/feed/member?rockstarId=${req.params.id}&offset=0&limit=30&group=all`,
@@ -50,6 +111,27 @@ router.get("/:id/feed", async (req, res) => {
     res.send(JSON.parse(result).activities)
 })
 
+/**
+ * @openapi
+ * /players/stats/{name}:
+ *   get:
+ *     tags:
+ *       - Player
+ *     summary: Get detailed statistics of a social club player
+ *     parameters:
+ *       - in: path
+ *         name: name
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Rockstar Player Name
+ *         example: 12345
+ *     responses:
+ *       '200':
+ *         description: OK
+ *       '400':
+ *         description: Bad Request. Player invalid or profile is private. Check Response Body.
+ */
 router.get("/stats/:name", async (req, res) => {
     const playerName = req.params.name
     const htmlParser = new HTMLParser()

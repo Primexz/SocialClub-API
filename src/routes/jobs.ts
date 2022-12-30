@@ -3,6 +3,25 @@ import { apiRequest } from ".."
 
 export const router = Router()
 
+/**
+ * @openapi
+ * /jobs/{searchQuery}:
+ *   get:
+ *     tags:
+ *       - Jobs
+ *     summary: Get an list of the jobs that match the search query
+ *     parameters:
+ *       - in: path
+ *         name: searchQuery
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Job Name
+ *         example: racing
+ *     responses:
+ *       '200':
+ *         description: OK
+ */
 router.get("/:searchQuery", async (req, res) => {
     const result = JSON.parse(
         await apiRequest.req(
