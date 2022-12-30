@@ -2,9 +2,13 @@ import express from "express"
 import { ApiRequest } from "./RockstarApi/ApiRequest"
 import { router as playerRouter } from "./routes/players"
 import { router as jobsRouter } from "./routes/jobs"
+import morgan from "morgan"
 
 const app = express()
 export const apiRequest = new ApiRequest()
+
+//log http request
+app.use(morgan("tiny"))
 
 app.use("/players", playerRouter)
 app.use("/jobs", jobsRouter)

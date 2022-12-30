@@ -67,8 +67,6 @@ export class ApiRequest extends ApiBrowser {
             "x-cache-ver": 0,
         })
 
-        console.log(options)
-
         if (options.body) {
             options.body = JSON.stringify(options.body)
             options.headers["Content-Type"] = "application/json"

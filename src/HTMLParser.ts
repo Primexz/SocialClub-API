@@ -10,7 +10,6 @@ export class HTMLParser {
     }
 
     parsePlayerStats(data: string) {
-        console.log(data)
         if (data.includes("This member is not sharing game stats"))
             return {
                 error: true,
