@@ -4,8 +4,8 @@ import { stringToInt } from "./util"
 export class HTMLParser {
     private getValueFromStat(statdiv: Node, index: number): string | number {
         return stringToInt(
-            statdiv.childNodes[1].childNodes[1].childNodes[index]?.childNodes[3]
-                ?.childNodes[0].rawText || "0"
+            statdiv?.childNodes[1]?.childNodes[1]?.childNodes[index]
+                ?.childNodes[3]?.childNodes[0]?.rawText || "/"
         )
     }
 
@@ -16,15 +16,7 @@ export class HTMLParser {
                 message: "Private profile",
             }
 
-        if (
-            data
-                .substr(
-                    data.indexOf("<td>Time spent in GTA Online</td>") + 33,
-                    250
-                )
-                .split("<td>")[1]
-                .split("</td>")[0] == "0"
-        )
+        if (this.isInvalidPlayer(data))
             return {
                 error: true,
                 message: "Invalid Player",
@@ -438,6 +430,18 @@ export class HTMLParser {
                 service_carbine_kills: this.getValueFromStat(weaponStats, 159),
             },
         }
+    }
+
+    private isInvalidPlayer(data: string): boolean {
+        return (
+            data
+                .substr(
+                    data.indexOf("<td>Time spent in GTA Online</td>") + 33,
+                    250
+                )
+                .split("<td>")[1]
+                .split("</td>")[0] == "0"
+        )
     }
 
     parsePlayerOverview(data: string) {
