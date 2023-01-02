@@ -2,10 +2,13 @@ import { Node, parse } from "node-html-parser"
 import { stringToInt } from "./util"
 
 export class HTMLParser {
+    constructor(readonly stringOnly?: boolean) {}
+
     private getValueFromStat(statdiv: Node, index: number): string | number {
         return stringToInt(
             statdiv?.childNodes[1]?.childNodes[1]?.childNodes[index]
-                ?.childNodes[3]?.childNodes[0]?.rawText || "/"
+                ?.childNodes[3]?.childNodes[0]?.rawText || "/",
+            this.stringOnly
         )
     }
 

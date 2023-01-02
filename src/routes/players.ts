@@ -134,7 +134,8 @@ router.get("/:id/feed", async (req, res) => {
  */
 router.get("/stats/:name", async (req, res) => {
     const playerName = req.params.name
-    const htmlParser = new HTMLParser()
+    const stringOnly = req.query?.stringOnly === "true"
+    const htmlParser = new HTMLParser(stringOnly)
 
     //make sure we have a request token in next requests..
     await apiRequest.req("https://socialclub.rockstargames.com/", {

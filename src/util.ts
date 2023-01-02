@@ -12,6 +12,6 @@ export function isNum(v: string): boolean {
  * @param input
  * @returns
  */
-export function stringToInt(input: string): string | number {
-    return isNum(input) ? Number(input) : input
+export function stringToInt(input: string, skip?: boolean): string | number {
+    return isNum(input) && !skip ? Number(input) : input
 }
